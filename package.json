@@ -1,0 +1,8 @@
+{
+  "name": "badger",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "simple-icons": "^13.0.0"
+  }
+}
