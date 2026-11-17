@@ -1,8 +1,9 @@
 import { getIcon } from './_icons.js';
 import { fetchStats, STATS } from './_github.js';
+import { pixelWidth, pixelPath } from './_pixelfont.js';
 
 export const SIZES = { xs: 16, sm: 20, md: 28, lg: 36, xl: 48, xxl: 64 };
-export const STYLES = ['flat', 'pill', 'glass', 'outline', 'square'];
+export const STYLES = ['pixel', 'flat', 'pill', 'glass', 'outline', 'square'];
 
 const NAMED = {
   green: '3fb950', blue: '58a6ff', red: 'f85149', orange: 'f78166', yellow: 'e3b341', purple: 'a371f7',
@@ -43,11 +44,16 @@ function luminance(hex) {
 }
 const ink = (bg) => (luminance(bg) > 0.4 ? '#1f2328' : '#ffffff');
 
+// rectangle with stepped (pixel) corners
+const notch = (w, h, s) => `M${s} 0H${w - s}V${s}H${w}V${h - s}H${w - s}V${h}H${s}V${h - s}H0V${s}H${s}z`;
+
 export function render(o) {
   const style = STYLES.includes(o.style) ? o.style : 'glass';
   const h = Math.round(SIZES[o.size] || (+o.size ? Math.min(128, Math.max(12, +o.size)) : SIZES.sm));
   const outline = style === 'outline';
   const caps = style === 'square';
+  const pixel = style === 'pixel';
+  const px = h / 12; // font pixel size for the pixel style
   const label = String(o.label ?? '').slice(0, 80);
   const value = String(o.value ?? '').slice(0, 80);
   const L = caps ? label.toUpperCase() : label;
@@ -58,7 +64,7 @@ export function render(o) {
   const valueBg2 = color(o.color2, null);
   const font = h * (caps ? 0.4 : 0.5);
   const weight = caps || outline ? 700 : 500;
-  const pad = h * (caps ? 0.55 : 0.42);
+  const pad = h * (caps ? 0.55 : pixel ? 0.36 : 0.42);
   const icon = getIcon(o.icon);
   const iconSize = h * 0.6;
   const gap = h * 0.22;
@@ -70,7 +76,7 @@ export function render(o) {
 
   const seg = (text, withIcon) => {
     if (!text && !withIcon) return null;
-    const tw = text ? textWidth(text, font, caps) : 0;
+    const tw = !text ? 0 : pixel ? pixelWidth(text) * px : textWidth(text, font, caps);
     return { text, tw, withIcon, w: pad * 2 + tw + (withIcon ? iconSize + (text ? gap : 0) : 0) };
   };
   const a = seg(L, icon && !iconInValue);
@@ -93,6 +99,11 @@ export function render(o) {
       x += iconSize + (s.text ? gap : 0);
     }
     if (!s.text) return;
+    if (pixel) {
+      const ty = (h - 7 * px) / 2;
+      parts.push(`<path fill="#010101" fill-opacity=".35" d="${pixelPath(s.text, x + px * 0.6, ty + px * 0.6, px)}"/><path fill="${inkColor}" d="${pixelPath(s.text, x, ty, px)}"/>`);
+      return;
+    }
     const attrs = `x="${x.toFixed(2)}" textLength="${s.tw.toFixed(2)}" lengthAdjust="spacingAndGlyphs"`;
     if (shadow) parts.push(`<text ${attrs} y="${(baseline + h * 0.04).toFixed(2)}" fill="#010101" fill-opacity=".3">${esc(s.text)}</text>`);
     parts.push(`<text ${attrs} y="${baseline.toFixed(2)}" fill="${inkColor}">${esc(s.text)}</text>`);
@@ -102,7 +113,7 @@ export function render(o) {
 
   const valueFill = outline ? valueBg : valueBg2 ? 'url(#v)' : valueBg;
   const title = esc([label, value].filter(Boolean).join(': '));
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${h}" viewBox="0 0 ${W} ${h}" role="img" aria-label="${title}"><title>${title}</title><defs>${valueBg2 ? `<linearGradient id="v" x2="100%"><stop offset="0" stop-color="${valueBg}"/><stop offset="1" stop-color="${valueBg2}"/></linearGradient>` : ''}<linearGradient id="s" x2="0" y2="100%"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".5" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#000" stop-opacity=".12"/></linearGradient><clipPath id="r"><rect width="${W}" height="${h}" rx="${r}"/></clipPath></defs><g clip-path="url(#r)"><rect width="${W}" height="${h}" fill="${labelBg}"/>${b ? `<rect x="${lw}" width="${W - lw}" height="${h}" fill="${valueFill}"${outline ? ' fill-opacity=".14"' : ''}/>` : ''}${style === 'glass' ? `<rect width="${W}" height="${h}" fill="url(#s)"/>` : ''}</g>${outline ? `<rect x=".5" y=".5" width="${W - 1}" height="${h - 1}" rx="${Math.max(0, r - 0.5)}" fill="none" stroke="#444c56"/>${a && b ? `<path d="M${lw} 0v${h}" stroke="#444c56"/>` : ''}` : ''}<g font-family="'Segoe UI',Helvetica,Arial,sans-serif" font-size="${font.toFixed(2)}" font-weight="${weight}">${parts.join('')}</g></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg"${pixel ? ' shape-rendering="crispEdges"' : ''} width="${W}" height="${h}" viewBox="0 0 ${W} ${h}" role="img" aria-label="${title}"><title>${title}</title><defs>${valueBg2 ? `<linearGradient id="v" x2="100%"><stop offset="0" stop-color="${valueBg}"/><stop offset="1" stop-color="${valueBg2}"/></linearGradient>` : ''}<linearGradient id="s" x2="0" y2="100%"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".5" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#000" stop-opacity=".12"/></linearGradient><clipPath id="r">${pixel ? `<path d="${notch(W, h, px * 1.5)}"/>` : `<rect width="${W}" height="${h}" rx="${r}"/>`}</clipPath></defs><g clip-path="url(#r)"><rect width="${W}" height="${h}" fill="${labelBg}"/>${b ? `<rect x="${lw}" width="${W - lw}" height="${h}" fill="${valueFill}"${outline ? ' fill-opacity=".14"' : ''}/>` : ''}${style === 'glass' ? `<rect width="${W}" height="${h}" fill="url(#s)"/>` : ''}${pixel ? `<rect width="${W}" height="${px}" fill="#fff" fill-opacity=".25"/><rect y="${h - px}" width="${W}" height="${px}" fill="#000" fill-opacity=".3"/>${a && b ? `<rect x="${lw - px / 2}" width="${px / 2}" height="${h}" fill="#000" fill-opacity=".25"/>` : ''}` : ''}</g>${outline ? `<rect x=".5" y=".5" width="${W - 1}" height="${h - 1}" rx="${Math.max(0, r - 0.5)}" fill="none" stroke="#444c56"/>${a && b ? `<path d="M${lw} 0v${h}" stroke="#444c56"/>` : ''}` : ''}<g font-family="'Segoe UI',Helvetica,Arial,sans-serif" font-size="${font.toFixed(2)}" font-weight="${weight}">${parts.join('')}</g></svg>`;
 }
 
 export default async function handler(req, res) {
