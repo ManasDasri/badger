@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="js">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -187,11 +187,39 @@ footer b{font:12px var(--pixel);color:var(--ink)}
   .row{grid-template-columns:1fr}
   .card,.stage,.sizes,.code{box-shadow:5px 5px 0 #000}
 }
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---- opening animations (pure CSS, run on every load) ---- */
+.boot{position:fixed;inset:0;z-index:100;background:#0b0e14;display:grid;place-content:center;justify-items:center;gap:18px;pointer-events:none;animation:bootout .4s steps(5) 1.15s forwards}
+.boot img{width:72px;height:72px;image-rendering:pixelated;animation:hop .4s steps(2) infinite}
+.boot b{font:13px var(--pixel);color:var(--green);letter-spacing:.1em}
+.boot .load{width:200px;height:18px;border:3px solid var(--line2);padding:2px}
+.boot .load i{display:block;height:100%;background:var(--green);animation:fill 1s steps(10) both}
+@keyframes fill{from{width:0}to{width:100%}}
+@keyframes bootout{to{clip-path:inset(0 0 100% 0);visibility:hidden}}
+.hero .logo{animation:drop .6s steps(6) 1.3s both,hop 1.2s steps(2) 2s infinite}
+@keyframes drop{0%{transform:translateY(-140px);opacity:0}70%{transform:translateY(10px);opacity:1}100%{transform:none}}
+h1{animation:type .9s steps(16) 1.6s both}
+@keyframes type{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 -10% -20% 0)}}
+.hero p{animation:pop .4s steps(4) 2.3s both}
+.cta .btn{animation:pop .4s steps(4) 2.5s both}
+.cta .btn+.btn{animation-delay:2.65s}
+.marquee{animation:slidein .6s steps(6) 2.8s both}
+@keyframes pop{from{opacity:0;transform:translateY(16px) scale(.9)}to{opacity:1;transform:none}}
+@keyframes slidein{from{transform:translateX(-100%)}to{transform:none}}
+nav{animation:navdown .4s steps(4) 1.2s both}
+@keyframes navdown{from{transform:translateY(-100%)}}
+.js [data-reveal]{opacity:0}
+.js [data-reveal].in{animation:pop .45s steps(4) both}
+.js [data-reveal].in:nth-child(2){animation-delay:.08s}.js [data-reveal].in:nth-child(3){animation-delay:.16s}.js [data-reveal].in:nth-child(4){animation-delay:.24s}
+.kicker{position:relative}
+.kicker.in::after{content:"";position:absolute;inset:0;background:#fff;animation:flash .3s steps(2) both}
+@keyframes flash{to{opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.boot{display:none}.js [data-reveal]{opacity:1}}
 </style>
 </head>
 <body>
 <div class="stars" id="stars"></div>
+<div class="boot" aria-hidden="true"><img src="/logo.svg" alt=""><b>LOADING BADGER</b><div class="load"><i></i></div></div>
 
 <nav><div class="wrap">
   <a class="brand" href="#"><img class="px" src="/logo.svg" alt="">badger</a>
@@ -212,12 +240,12 @@ footer b{font:12px var(--pixel);color:var(--ink)}
 </header>
 
 <section id="build"><div class="wrap">
-  <div class="kicker">Stage 1 · Builder</div>
-  <h2>Make it yours.</h2>
+  <div class="kicker" data-reveal>Stage 1 · Builder</div>
+  <h2 data-reveal>Make it yours.</h2>
   <p class="sub">Every change updates the live badge. Copy the Markdown into your README when you're happy.</p>
 
   <div class="builder">
-    <div class="card">
+    <div class="card" data-reveal>
       <div class="row">
         <div class="field"><label for="f-label">Label</label><input type="text" id="f-label" data-k="label"></div>
         <div class="field"><label for="f-value">Value</label><input type="text" id="f-value" data-k="value"></div>
@@ -272,8 +300,8 @@ footer b{font:12px var(--pixel);color:var(--ink)}
 </div></section>
 
 <section id="scan"><div class="wrap">
-  <div class="kicker">Stage 2 · GitHub scan</div>
-  <h2>Turn your profile into badges.</h2>
+  <div class="kicker" data-reveal>Stage 2 · GitHub scan</div>
+  <h2 data-reveal>Turn your profile into badges.</h2>
   <p class="sub">Enter a username. Badger reads public GitHub data and gives you a live badge for each stat.</p>
   <form class="scanbar" id="scanform">
     <div class="at"><input type="text" id="scanuser" placeholder="username" required pattern="[A-Za-z0-9](?:[A-Za-z0-9\-]{0,38})" autocomplete="off"></div>
@@ -283,20 +311,20 @@ footer b{font:12px var(--pixel);color:var(--ink)}
 </div></section>
 
 <section id="presets"><div class="wrap">
-  <div class="kicker">Stage 3 · Presets</div>
-  <h2>Start from something good.</h2>
+  <div class="kicker" data-reveal>Stage 3 · Presets</div>
+  <h2 data-reveal>Start from something good.</h2>
   <p class="sub">Click one to load it into the builder.</p>
   <div class="presets" id="presetgrid"></div>
 </div></section>
 
 <section id="api"><div class="wrap">
-  <div class="kicker">Stage 4 · API</div>
-  <h2>It's just a URL.</h2>
+  <div class="kicker" data-reveal>Stage 4 · API</div>
+  <h2 data-reveal>It's just a URL.</h2>
   <p class="sub">Every badge is an SVG served from <code style="font-family:var(--mono)">/api/badge</code>. Edit the query string by hand if you like.</p>
   <div class="how">
-    <div class="card"><span class="num">01</span><h3>Design</h3><p>Pick a style, size, colors and icon in the builder, or start from a preset.</p></div>
-    <div class="card"><span class="num">02</span><h3>Copy</h3><p>Paste the Markdown into your <code>README.md</code>. GitHub renders the badge like any image.</p></div>
-    <div class="card"><span class="num">03</span><h3>Go live</h3><p>Add <code>gh=you&amp;stat=stars</code> and the value updates from GitHub about every hour.</p></div>
+    <div class="card" data-reveal><span class="num">01</span><h3>Design</h3><p>Pick a style, size, colors and icon in the builder, or start from a preset.</p></div>
+    <div class="card" data-reveal><span class="num">02</span><h3>Copy</h3><p>Paste the Markdown into your <code>README.md</code>. GitHub renders the badge like any image.</p></div>
+    <div class="card" data-reveal><span class="num">03</span><h3>Go live</h3><p>Add <code>gh=you&amp;stat=stars</code> and the value updates from GitHub about every hour.</p></div>
   </div>
   <table class="params">
     <tr><td>label, value</td><td>Text for the left and right halves. Leave one empty for a single-part badge.</td></tr>
@@ -452,7 +480,7 @@ $('#iconlist').onclick = (e) => { const b = e.target.closest('button'); if (!b) 
 
 /* ---------- presets + marquee ---------- */
 const load = (s) => { S = { ...s }; ensureIcon(S.icon); render(); $('#build').scrollIntoView(); };
-$('#presetgrid').innerHTML = PRESETS.map(([n, s], i) => `<button type="button" class="preset" data-p="${i}"><img src="${badgeUrl(s)}" alt="${n} badge"><span>${n}</span></button>`).join('');
+$('#presetgrid').innerHTML = PRESETS.map(([n, s], i) => `<button type="button" class="preset" data-reveal data-p="${i}"><img src="${badgeUrl(s)}" alt="${n} badge"><span>${n}</span></button>`).join('');
 $('#presetgrid').onclick = (e) => { const b = e.target.closest('[data-p]'); if (b) load(PRESETS[b.dataset.p][1]); };
 const marq = PRESETS.filter(([, s]) => !s.gh).concat([
   ['', { label: 'badges', value: 'with bite', icon: 'badger', style: 'pixel', color: '3fb950' }],
@@ -483,7 +511,7 @@ function drawScan(s) {
   $('#scanout').innerHTML = `
     <div class="profile"><img src="https://github.com/${s.login}.png?size=128" alt=""><div><h3>@${s.login}</h3><p>${s.repos} public repos · joined ${s.joined}</p><div class="xp">LV.${s.lv} <span class="bar">${Array.from({ length: 10 }, (_, i) => `<i class="${i < Math.round(s.lv / 10) ? 'f' : ''}"></i>`).join('')}</span> ${s.title.toUpperCase()}</div></div></div>
     <div class="field"><span class="lbl">Style for all</span><div class="chips" id="scanstyles">${STYLES.map((x) => `<button type="button" class="chip ${x === scanStyle.style ? 'on' : ''}" data-v="${x}">${x}</button>`).join('')}</div></div>
-    <div class="statgrid">${items.map(({ k, s: b }, i) => `<div class="stat"><div class="k">${STATS[k]} <b>${raw[k]}</b></div><div class="b"><img src="${badgeUrl(b)}" alt="${STATS[k]} badge"></div><div class="acts"><button class="btn" data-copy="${i}">Copy</button><button class="btn" data-edit="${i}">Customize</button></div></div>`).join('')}</div>
+    <div class="statgrid">${items.map(({ k, s: b }, i) => `<div class="stat" data-reveal><div class="k">${STATS[k]} <b>${raw[k]}</b></div><div class="b"><img src="${badgeUrl(b)}" alt="${STATS[k]} badge"></div><div class="acts"><button class="btn" data-copy="${i}">Copy</button><button class="btn" data-edit="${i}">Customize</button></div></div>`).join('')}</div>
     <div class="actions"><button class="btn primary" id="copyall">Copy all as Markdown</button></div>
     <p class="note">Badger rank is a made-up, just-for-fun score from stars, followers, repos, forks and account age. Stars and forks count your first 300 non-fork repos.</p>`;
   $('#scanout').onclick = (e) => {
@@ -496,6 +524,10 @@ function drawScan(s) {
 }
 
 /* ---------- boot ---------- */
+const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.15 });
+const reveal = () => $$('[data-reveal]:not(.in)').forEach((el) => io.observe(el));
+reveal();
+new MutationObserver(reveal).observe(document.body, { childList: true, subtree: true });
 $('#stars').innerHTML = Array.from({ length: 40 }, () => `<i style="left:${Math.random() * 100}%;top:${Math.random() * 100}%;animation-delay:${(Math.random() * 2.4).toFixed(1)}s;opacity:${(0.3 + Math.random() * 0.5).toFixed(2)}"></i>`).join('');
 const h = new URLSearchParams(location.hash.slice(1)).get('b');
 if (h) { S = {}; for (const [k, v] of new URLSearchParams(h)) if (KEYS.includes(k)) S[k] = v; if (!S.style) S.style = 'glass'; }
