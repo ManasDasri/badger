@@ -271,10 +271,8 @@ nav{animation:navdown .4s steps(4) 1.2s both}
 
       <details class="gh" id="ghbox">
         <summary><img class="px" src="/logo.svg" alt="" width="20" height="20"> Live GitHub stat <span style="color:var(--mute)">(optional)</span></summary>
-        <div class="row">
-          <div class="field"><label for="f-gh">Username</label><input type="text" id="f-gh" data-k="gh" placeholder="torvalds"></div>
-          <div class="field"><label for="f-stat">Stat</label><select id="f-stat" data-k="stat"></select></div>
-        </div>
+        <div class="field"><label for="f-gh">Username</label><input type="text" id="f-gh" data-k="gh" placeholder="torvalds"></div>
+        <div class="field"><span class="lbl">Stat</span><div class="chips" data-set="stat"></div></div>
         <p class="note" style="margin:0">When set, the value is pulled from GitHub and refreshes about hourly.</p>
       </details>
     </div>
@@ -403,7 +401,7 @@ function chipset(name, options) {
 chipset('style', STYLES.map((s) => [s, s]));
 chipset('size', Object.keys(SIZES).map((s) => [s, s]));
 chipset('iconPos', [['label', 'Left'], ['value', 'Right']]);
-$('#f-stat').innerHTML = '<option value="">Pick a stat</option>' + Object.entries(STATS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('');
+chipset('stat', Object.entries(STATS));
 $('#swatches').innerHTML = SWATCHES.map((c) => `<button type="button" style="background:#${c}" data-sw="${c}" title="#${c}" aria-label="Value color #${c}"></button>`).join('');
 $('#swatches').onclick = (e) => { const c = e.target.dataset.sw; if (c) { S.color = c; render(); } };
 
