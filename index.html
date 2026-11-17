@@ -121,7 +121,7 @@ details.gh[open] summary{margin-bottom:14px}
 .tabs{display:flex;gap:6px}
 .tabs button{padding:8px 12px;border:3px solid var(--line2);border-bottom:0;background:var(--panel);cursor:pointer;color:var(--mute);font:11px var(--pixel);text-transform:uppercase}
 .tabs button.on{background:#000;color:var(--green);border-color:var(--green)}
-.code{position:relative;background:#000;border:3px solid var(--green);padding:14px 110px 14px 14px;font:20px/1.2 var(--mono);color:var(--green);word-break:break-all;min-height:56px;box-shadow:8px 8px 0 #000}
+.code{white-space:pre-wrap;position:relative;background:#000;border:3px solid var(--green);padding:14px 110px 14px 14px;font:20px/1.2 var(--mono);color:var(--green);word-break:break-all;min-height:56px;box-shadow:8px 8px 0 #000}
 .code::before{content:"> ";color:var(--yellow)}
 .copy{position:absolute;top:8px;right:8px;padding:8px 12px;font-size:11px}
 .actions{display:flex;gap:14px;margin-top:22px;flex-wrap:wrap}
@@ -176,6 +176,48 @@ footer b{font:12px var(--pixel);color:var(--ink)}
 .toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,120px);background:var(--yellow);color:#000;font:13px var(--pixel);padding:12px 18px;border:3px solid #000;box-shadow:4px 4px 0 #000;z-index:99;transition:transform .2s steps(3)}
 .toast.show{transform:translate(-50%,0)}
 
+/* quick start */
+.quick{margin:0 auto}
+.or{color:var(--mute);margin-top:18px;font-size:20px}
+.or a{color:var(--yellow)}
+
+/* sound toggle */
+.snd{margin-left:8px;padding:6px 10px;border:3px solid var(--line2);background:none;cursor:pointer;font:11px var(--pixel);color:var(--mute)}
+.snd:hover{color:var(--ink);border-color:var(--mute)}
+
+/* coin burst */
+.coin{position:fixed;width:8px;height:8px;background:var(--yellow);box-shadow:2px 2px 0 #000;z-index:120;pointer-events:none;animation:coinfly .6s steps(6) forwards}
+@keyframes coinfly{to{transform:translate(var(--dx),var(--dy));opacity:0}}
+.plus{position:fixed;font:14px var(--pixel);color:var(--yellow);text-shadow:2px 2px 0 #000;z-index:120;pointer-events:none;animation:plusup .8s steps(8) forwards}
+@keyframes plusup{to{transform:translateY(-44px);opacity:0}}
+
+/* achievements */
+.ach{position:fixed;top:84px;right:20px;z-index:110;display:flex;gap:12px;align-items:center;background:var(--panel);border:3px solid var(--yellow);box-shadow:5px 5px 0 #000;padding:10px 14px;transform:translateX(calc(100% + 40px));transition:transform .3s steps(4)}
+.ach.show{transform:none}
+.ach img{width:32px;image-rendering:pixelated}
+.ach small{display:block;font:9px var(--pixel);color:var(--yellow)}
+.ach b{font:12px var(--pixel)}
+
+/* README dock + drawer */
+.dock{position:fixed;right:20px;bottom:20px;z-index:60;display:none}
+.dock.has{display:inline-flex}
+.dock b{background:#000;color:var(--yellow);padding:2px 7px;font-weight:400}
+.dock.bump{animation:pop .3s steps(3)}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);z-index:90;background:var(--bg);border-left:4px solid var(--line);box-shadow:-10px 0 0 #0008;padding:22px;overflow:auto;transform:translateX(105%);transition:transform .3s steps(5)}
+.drawer.open{transform:none}
+.drawer header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.drawer h3{font:700 28px var(--display);margin:0;flex:1}
+.readme{background:#0d1117;border:1px solid #30363d;padding:22px;margin:14px 0;font:15px/1.5 -apple-system,'Segoe UI',Helvetica,Arial,sans-serif;color:#e6edf3}
+.readme .file{font:12px -apple-system,'Segoe UI',sans-serif;color:#8b949e;border-bottom:1px solid #30363d;margin:-22px -22px 18px;padding:10px 16px;background:#161b22}
+.readme h1{font:600 28px -apple-system,'Segoe UI',sans-serif;border-bottom:1px solid #30363d;padding-bottom:8px;margin:0 0 14px}
+.readme .row{display:flex;flex-wrap:wrap;gap:6px;grid-template-columns:none}
+.readme .row.center{justify-content:center}
+.readme .row img{cursor:pointer;max-width:100%}
+.readme .row img:hover{outline:2px dashed var(--pink);outline-offset:2px}
+.readme .empty{color:#8b949e}
+.scrim{position:fixed;inset:0;background:#0009;z-index:80;display:none}
+.scrim.open{display:block}
+
 @media (max-width:900px){
   .builder{grid-template-columns:minmax(0,1fr)}
   .how{grid-template-columns:1fr}
@@ -201,8 +243,8 @@ footer b{font:12px var(--pixel);color:var(--ink)}
 h1{animation:type .9s steps(16) 1.6s both}
 @keyframes type{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 -10% -20% 0)}}
 .hero p{animation:pop .4s steps(4) 2.3s both}
-.cta .btn{animation:pop .4s steps(4) 2.5s both}
-.cta .btn+.btn{animation-delay:2.65s}
+.quick{animation:pop .4s steps(4) 2.5s both}
+.or{animation:pop .4s steps(4) 2.7s both}
 .marquee{animation:slidein .6s steps(6) 2.8s both}
 @keyframes pop{from{opacity:0;transform:translateY(16px) scale(.9)}to{opacity:1;transform:none}}
 @keyframes slidein{from{transform:translateX(-100%)}to{transform:none}}
@@ -226,16 +268,18 @@ nav{animation:navdown .4s steps(4) 1.2s both}
   <div class="links">
     <a href="#build">Builder</a><a href="#scan">GitHub scan</a><a href="#presets">Presets</a><a href="#api">API</a>
   </div>
+  <button class="snd" id="snd" type="button" aria-label="Toggle sound">SND ON</button>
 </div></nav>
 
 <header class="hero wrap">
   <img class="logo px" src="/logo.svg" alt="Badger logo">
   <h1>Badges with <em>bite.</em></h1>
   <p>Design README badges in any size and style, pick from 3,000+ brand icons, or scan a GitHub profile and turn the stats into live badges.<span class="blink">_</span></p>
-  <div class="cta">
-    <a class="btn primary" href="#build">▶ Press start</a>
-    <a class="btn yellow" href="#scan">Scan my GitHub</a>
-  </div>
+  <form class="scanbar quick" id="quick">
+    <div class="at"><input type="text" id="quickuser" placeholder="your-username" required pattern="[A-Za-z0-9](?:[A-Za-z0-9\-]{0,38})" autocomplete="off" aria-label="GitHub username"></div>
+    <button class="btn primary" type="submit">▶ Press start</button>
+  </form>
+  <p class="or">or <a href="#build">build one from scratch</a> · <a href="#presets">browse presets</a></p>
   <div class="marquee"><div class="track" id="marquee"></div></div>
 </header>
 
@@ -289,6 +333,7 @@ nav{animation:navdown .4s steps(4) 1.2s both}
         <div class="code"><span id="code"></span><button class="btn copy" id="copy">Copy</button></div>
       </div>
       <div class="actions">
+        <button class="btn primary" id="add">+ Add to README</button>
         <button class="btn" id="share">Share link</button>
         <button class="btn" id="dl">Download SVG</button>
         <button class="btn" id="rand">? Surprise me</button>
@@ -340,13 +385,25 @@ nav{animation:navdown .4s steps(4) 1.2s both}
 </div></footer>
 
 <div class="toast" id="toast">Copied!</div>
+<div class="ach" id="ach" role="status"><img src="/logo.svg" alt=""><div><small>Achievement unlocked</small><b id="achtext"></b></div></div>
+<button class="btn yellow dock" id="dock" type="button">README <b id="invn">0</b></button>
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Your README">
+  <header><h3>Your README</h3><button class="btn" id="closedrawer" type="button" aria-label="Close">X</button></header>
+  <div class="field"><label for="rtitle">Heading</label><input type="text" id="rtitle" placeholder="Hi, I'm …"></div>
+  <div class="field"><span class="lbl">Align</span><div class="chips" id="ralign"><button type="button" class="chip on" data-a="center">Center</button><button type="button" class="chip" data-a="left">Left</button></div></div>
+  <div class="readme"><div class="file">README.md</div><h1 id="rh"></h1><div class="row" id="rrow"></div></div>
+  <p class="note" style="margin:0 0 14px">Click a badge to remove it.</p>
+  <div class="code"><span id="rcode"></span><button class="btn copy" id="rcopy">Copy</button></div>
+  <div class="actions"><button class="btn" id="rclear" type="button">Clear all</button></div>
+</aside>
 
-<script>
+<script type="module">
+import { render as draw, SIZES, STYLES } from '/lib/render.js';
+
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const ORIGIN = location.origin;
-const STYLES = ['pixel', 'flat', 'pill', 'glass', 'outline', 'square'];
-const SIZES = { xs: 16, sm: 20, md: 28, lg: 36, xl: 48, xxl: 64 };
 const STATS = { stars: 'Stars', followers: 'Followers', repos: 'Repos', forks: 'Forks', gists: 'Gists', language: 'Top language', joined: 'Coding since', rank: 'Badger rank' };
 const KEYS = ['label', 'value', 'style', 'size', 'labelColor', 'color', 'color2', 'icon', 'iconColor', 'iconPos', 'gh', 'stat'];
 const DEFAULT = { label: 'dev level', value: 'Lv.42 Code Wizard', style: 'pixel', size: 'lg', color: '7fb59b' };
@@ -389,14 +446,69 @@ function params(s, overrides = {}) {
 const badgeUrl = (s, o) => `${ORIGIN}/api/badge?${params(s, o)}`;
 const altText = (s) => s.gh ? `${s.gh} ${STATS[s.stat] || ''}`.trim() : [s.label, s.value].filter(Boolean).join(': ') || 'badge';
 
+// per-viewer conveniences only; the page works without storage
+const store = { get(k, d) { try { return JSON.parse(localStorage.getItem('badger-' + k)) ?? d; } catch { return d; } }, set(k, v) { try { localStorage.setItem('badger-' + k, JSON.stringify(v)); } catch {} } };
+
+/* ---------- 8-bit sound ---------- */
+let ac, muted = store.get('muted', false);
+const SFX = { click: [[660, .05]], select: [[880, .05]], coin: [[988, .08], [1319, .28]], up: [[523, .08], [659, .08], [784, .08], [1047, .22]], err: [[220, .12], [160, .22]], drop: [[784, .06], [523, .1]] };
+function beep(notes) {
+  if (muted) return;
+  try {
+    ac ||= new AudioContext();
+    let t = ac.currentTime;
+    for (const [f, d] of notes) {
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.type = 'square'; o.frequency.value = f;
+      g.gain.setValueAtTime(0.035, t); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+      o.connect(g).connect(ac.destination); o.start(t); o.stop(t + d);
+      t += d * 0.85;
+    }
+  } catch {}
+}
+const sndLabel = () => ($('#snd').textContent = muted ? 'SND OFF' : 'SND ON');
+sndLabel();
+$('#snd').onclick = () => { muted = !muted; store.set('muted', muted); sndLabel(); beep(SFX.select); };
+document.addEventListener('click', (e) => {
+  if (e.target.closest('.chip,.swatches button,.iconlist button,.tabs button,.sizes figure,.bgs button')) beep(SFX.select);
+  else if (e.target.closest('.btn:not(.copy):not([data-copy]):not(#copyall):not(#share),.preset,.marquee img')) beep(SFX.click);
+});
+
+/* ---------- juice: coin burst + achievements ---------- */
+let lastPt = { x: innerWidth / 2, y: innerHeight / 2 };
+addEventListener('pointerdown', (e) => (lastPt = { x: e.clientX, y: e.clientY }));
+function burst({ x, y } = lastPt, label = '+1') {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const els = Array.from({ length: 10 }, (_, i) => {
+    const a = (i / 10) * Math.PI * 2, r = 40 + Math.random() * 40;
+    const el = Object.assign(document.createElement('i'), { className: 'coin' });
+    el.style.cssText = `left:${x - 4}px;top:${y - 4}px;--dx:${(Math.cos(a) * r).toFixed(0)}px;--dy:${(Math.sin(a) * r - 20).toFixed(0)}px`;
+    return el;
+  });
+  const plus = Object.assign(document.createElement('span'), { className: 'plus', textContent: label });
+  plus.style.cssText = `left:${x - 12}px;top:${y - 30}px`;
+  document.body.append(...els, plus);
+  setTimeout(() => [...els, plus].forEach((el) => el.remove()), 900);
+}
+const ACH = { copy: 'First badge copied', scan: 'Profile scanned', readme: 'README started', five: 'Collector: 5 badges', styles: 'Tried every style' };
+const got = new Set(store.get('ach', []));
+function unlock(k) {
+  if (got.has(k)) return;
+  got.add(k); store.set('ach', [...got]);
+  $('#achtext').textContent = ACH[k];
+  const a = $('#ach'); a.classList.add('show'); beep(SFX.up);
+  clearTimeout(unlock.t); unlock.t = setTimeout(() => a.classList.remove('show'), 2600);
+}
+const triedStyles = new Set();
+
 function toast(msg = 'Copied!') { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('show'), 1400); }
-async function copy(text, msg) { try { await navigator.clipboard.writeText(text); toast(msg); } catch { prompt('Copy this:', text); } }
+async function copy(text, msg) { try { await navigator.clipboard.writeText(text); toast(msg); beep(SFX.coin); burst(); unlock('copy'); } catch { prompt('Copy this:', text); } }
 
 /* ---------- builder ---------- */
 function chipset(name, options) {
   const box = $(`[data-set=${name}]`);
   box.innerHTML = options.map(([v, l]) => `<button type="button" class="chip" data-v="${v}">${l}</button>`).join('');
-  box.onclick = (e) => { const b = e.target.closest('.chip'); if (b) { S[name] = b.dataset.v; render(); } };
+  box.onclick = (e) => { const b = e.target.closest('.chip'); if (!b) return; S[name] = b.dataset.v; render(); if (name === 'style') { triedStyles.add(b.dataset.v); if (triedStyles.size === STYLES.length) unlock('styles'); } };
 }
 chipset('style', STYLES.map((s) => [s, s]));
 chipset('size', Object.keys(SIZES).map((s) => [s, s]));
@@ -419,20 +531,22 @@ function syncForm() {
   if (document.activeElement !== $('#f-icon')) $('#f-icon').value = S.icon || '';
 }
 
+// Static badges render in the browser (instant); live GitHub ones need the server.
+const src = (s, o = {}) => s.gh ? badgeUrl(s, o) : 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(draw({ ...s, ...o }, iconCache[s.icon] || null));
 let rt;
 function render(sync = true) {
   if (sync) syncForm();
   clearTimeout(rt);
   rt = setTimeout(() => {
-    const url = badgeUrl(S);
     const img = $('#preview');
     img.onload = () => { $('#dims').textContent = `${img.naturalWidth} × ${img.naturalHeight}px`; };
-    img.src = url;
+    img.src = src(S);
     img.style.zoom = Math.max(1, Math.min(3, 120 / (SIZES[S.size] || 20)));
-    $('#sizes').innerHTML = Object.keys(SIZES).map((k) => `<figure data-size="${k}" class="${(S.size || 'sm') === k ? 'on' : ''}"><img src="${badgeUrl(S, { size: k })}" alt=""><figcaption>${k} · ${SIZES[k]}px</figcaption></figure>`).join('');
+    if (sync) img.animate([{ transform: 'scale(1.06)' }, { transform: 'none' }], { duration: 160, easing: 'steps(2)' });
+    $('#sizes').innerHTML = Object.keys(SIZES).map((k) => `<figure data-size="${k}" class="${(S.size || 'sm') === k ? 'on' : ''}"><img src="${src(S, { size: k })}" alt=""><figcaption>${k} · ${SIZES[k]}px</figcaption></figure>`).join('');
     showCode();
     history.replaceState(null, '', '#b=' + encodeURIComponent(params(S)));
-  }, 140);
+  }, S.gh ? 300 : 0);
 }
 $('#sizes').onclick = (e) => { const f = e.target.closest('figure'); if (f) { S.size = f.dataset.size; render(); } };
 
@@ -472,7 +586,7 @@ async function searchIcons(q) {
   $('#iconlist').innerHTML = `<button type="button" data-i="" title="No icon" style="color:var(--mute);font-size:18px">∅</button>` + list.map((i) => `<button type="button" data-i="${i.slug}" title="${i.title}" class="${S.icon === i.slug ? 'on' : ''}"><svg viewBox="0 0 24 24"><path fill="${i.hex.toLowerCase() === '000000' || i.hex.toLowerCase() === '181717' ? '#e6edf3' : '#' + i.hex}" fill-rule="evenodd" d="${i.path}"/></svg></button>`).join('');
   syncForm();
 }
-async function ensureIcon(slug) { if (slug && !iconCache[slug]) { const l = await (await fetch('/api/icons?q=' + slug)).json(); l.forEach((i) => iconCache[i.slug] = i); syncForm(); } }
+async function ensureIcon(slug) { if (slug && !iconCache[slug]) { const l = await (await fetch('/api/icons?q=' + encodeURIComponent(slug))).json(); l.forEach((i) => iconCache[i.slug] = i); render(); drawReadme(); } }
 $('#f-icon').addEventListener('input', (e) => { clearTimeout(iq); iq = setTimeout(() => searchIcons(e.target.value), 180); });
 $('#iconlist').onclick = (e) => { const b = e.target.closest('button'); if (!b) return; S.icon = b.dataset.i; $('#f-icon').value = S.icon; $$('#iconlist button').forEach((x) => x.classList.toggle('on', x === b)); render(); };
 
@@ -499,8 +613,9 @@ $('#scanform').onsubmit = async (e) => {
   out.innerHTML = '<p class="note">Loading<span class="blink">...</span></p>';
   const r = await fetch('/api/stats?user=' + encodeURIComponent(user));
   const s = await r.json();
-  if (!r.ok) { out.innerHTML = `<p class="err">Couldn't scan “${user.replace(/</g, '&lt;')}”: ${s.error}.</p>`; return; }
-  drawScan(s);
+  if (!r.ok) { beep(SFX.err); out.innerHTML = `<p class="err">Couldn't scan “${user.replace(/</g, '&lt;')}”: ${s.error}.</p>`; return; }
+  beep(SFX.up); drawScan(s); unlock('scan');
+  if (!$('#rtitle').value) { $('#rtitle').value = `Hi, I'm ${s.login}`; drawReadme(); }
 };
 function drawScan(s) {
   const colors = { stars: 'e3b341', followers: 'db61a2', repos: '58a6ff', forks: 'a371f7', gists: '39c5bb', language: 'f78166', joined: '3fb950', rank: '7fb59b' };
@@ -510,16 +625,64 @@ function drawScan(s) {
     <div class="profile"><img src="https://github.com/${s.login}.png?size=128" alt=""><div><h3>@${s.login}</h3><p>${s.repos} public repos · joined ${s.joined}</p><div class="xp">LV.${s.lv} <span class="bar">${Array.from({ length: 10 }, (_, i) => `<i class="${i < Math.round(s.lv / 10) ? 'f' : ''}"></i>`).join('')}</span> ${s.title.toUpperCase()}</div></div></div>
     <div class="field"><span class="lbl">Style for all</span><div class="chips" id="scanstyles">${STYLES.map((x) => `<button type="button" class="chip ${x === scanStyle.style ? 'on' : ''}" data-v="${x}">${x}</button>`).join('')}</div></div>
     <div class="statgrid">${items.map(({ k, s: b }, i) => `<div class="stat" data-reveal><div class="k">${STATS[k]} <b>${raw[k]}</b></div><div class="b"><img src="${badgeUrl(b)}" alt="${STATS[k]} badge"></div><div class="acts"><button class="btn" data-copy="${i}">Copy</button><button class="btn" data-edit="${i}">Customize</button></div></div>`).join('')}</div>
-    <div class="actions"><button class="btn primary" id="copyall">Copy all as Markdown</button></div>
+    <div class="actions"><button class="btn primary" id="addall">+ Add all to README</button><button class="btn" id="copyall">Copy all as Markdown</button></div>
     <p class="note">Badger rank is a made-up, just-for-fun score from stars, followers, repos, forks and account age. Stars and forks count your first 300 non-fork repos.</p>`;
   $('#scanout').onclick = (e) => {
     const t = e.target;
     if (t.dataset.copy) copy(snippet(items[t.dataset.copy].s, 'md'));
     if (t.dataset.edit) load(items[t.dataset.edit].s);
     if (t.id === 'copyall') copy(items.map((x) => snippet(x.s, 'md')).join(' '));
+    if (t.id === 'addall') addToReadme(...items.map((x) => x.s));
     if (t.dataset.v) { scanStyle.style = t.dataset.v; drawScan(s); }
   };
 }
+
+/* ---------- hero quick start ---------- */
+$('#quick').onsubmit = (e) => {
+  e.preventDefault();
+  $('#scanuser').value = $('#quickuser').value.trim();
+  $('#scan').scrollIntoView();
+  $('#scanform').requestSubmit();
+};
+
+/* ---------- README collection ---------- */
+let inv = store.get('inv', []);
+let align = store.get('align', 'center');
+$('#rtitle').value = store.get('title', '');
+function drawReadme() {
+  store.set('inv', inv); store.set('title', $('#rtitle').value); store.set('align', align);
+  $('#invn').textContent = inv.length;
+  $('#dock').classList.toggle('has', inv.length > 0);
+  $('#rh').textContent = $('#rtitle').value || 'Hi, I\'m …';
+  $('#rrow').className = 'row ' + align;
+  $('#rrow').innerHTML = inv.length ? inv.map((b, i) => `<img src="${src(b)}" alt="${altText(b).replace(/"/g, '&quot;')}" data-i="${i}" title="Click to remove">`).join('') : '<span class="empty">No badges yet. Add some from the builder or a scan.</span>';
+  $$('#ralign .chip').forEach((c) => c.classList.toggle('on', c.dataset.a === align));
+  const title = $('#rtitle').value.trim();
+  const imgs = inv.map((b) => snippet(b, align === 'center' ? 'html' : 'md'));
+  const body = align === 'center' ? `<p align="center">\n  ${imgs.join('\n  ')}\n</p>` : imgs.join(' ');
+  $('#rcode').textContent = (title ? `# ${title}\n\n` : '') + (inv.length ? body : '');
+}
+function addToReadme(...badges) {
+  badges.forEach((b) => ensureIcon(b.icon));
+  inv.push(...badges.map((b) => ({ ...b })));
+  drawReadme();
+  const d = $('#dock'); d.classList.remove('bump'); void d.offsetWidth; d.classList.add('bump');
+  beep(SFX.drop); burst(lastPt, '+' + badges.length);
+  toast(badges.length > 1 ? `${badges.length} badges added` : 'Added to README');
+  unlock('readme'); if (inv.length >= 5) unlock('five');
+}
+const openDrawer = (on) => { $('#drawer').classList.toggle('open', on); $('#scrim').classList.toggle('open', on); };
+$('#add').onclick = () => addToReadme(S);
+$('#dock').onclick = () => openDrawer(true);
+$('#closedrawer').onclick = $('#scrim').onclick = () => openDrawer(false);
+addEventListener('keydown', (e) => { if (e.key === 'Escape') openDrawer(false); });
+$('#rrow').onclick = (e) => { const i = e.target.dataset.i; if (i != null) { inv.splice(+i, 1); beep(SFX.err); drawReadme(); } };
+$('#rtitle').oninput = drawReadme;
+$('#ralign').onclick = (e) => { const a = e.target.dataset.a; if (a) { align = a; drawReadme(); } };
+$('#rcopy').onclick = () => copy($('#rcode').textContent, 'README copied!');
+$('#rclear').onclick = () => { inv = []; drawReadme(); };
+inv.forEach((b) => ensureIcon(b.icon));
+drawReadme();
 
 /* ---------- boot ---------- */
 const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.15 });
