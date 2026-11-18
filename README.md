@@ -10,6 +10,10 @@ https://gitbadger.vercel.app/api/badge?label=player%201&value=ready&style=pixel&
 
 Live stats: add `gh=<user>&stat=stars|followers|repos|forks|gists|language|joined|rank`.
 
+## Stack
+
+React + Vite + GSAP for the site, Vercel functions in `api/` for badges and GitHub stats. `lib/render.js` draws badges and is shared by the API and the browser preview.
+
 ## Run locally
 
 ```
