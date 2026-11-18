@@ -1,5 +1,7 @@
 # badger
 
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/ManasDasri/badger/badge)](https://scorecard.dev/viewer/?uri=github.com/ManasDasri/badger)
+
 Badges with bite. A builder for custom GitHub README badges: six styles (including a pixel style with a built-in bitmap font), any size, 3,000+ Simple Icons plus custom icons, and live badges from GitHub stats.
 
 Every badge is a URL:
